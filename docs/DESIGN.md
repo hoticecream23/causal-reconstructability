@@ -1,7 +1,7 @@
 # Causal Reconstructability of SAE Features
 
 **Question.** If we delete an SAE feature `f_i` from a model, can we rebuild it well enough
-from the *other* features that the model's behaviour is restored — and is that the same thing
+from the *other* features that the model's behaviour is restored - and is that the same thing
 as being able to *predict* `f_i` from the other features?
 
 The claim under test is that these two things come apart. Prediction is representational
@@ -12,8 +12,8 @@ feature-circuit correlation) measures the first and quietly assumes the second.
 
 For each target feature `f_i`:
 
-- **x-axis — reconstruction quality `R²`**: how well `ĝ_θ(S)` predicts `f_i`'s activation on held-out prompts.
-- **y-axis — rescue fraction `R`**: how much of `f_i`'s causal contribution is restored when
+- **x-axis - reconstruction quality `R²`**: how well `ĝ_θ(S)` predicts `f_i`'s activation on held-out prompts.
+- **y-axis - rescue fraction `R`**: how much of `f_i`'s causal contribution is restored when
   `ĝ_θ(S)` is injected into the residual stream after `f_i` is ablated.
 
 ```
@@ -27,7 +27,7 @@ The interesting quadrants:
 
 | | low `R` | high `R` |
 |---|---|---|
-| **high `R²`** | predictable but irreplaceable — redundant representation, unique function | plain redundancy |
+| **high `R²`** | predictable but irreplaceable - redundant representation, unique function | plain redundancy |
 | **low `R²`** | genuinely load-bearing and unique | value doesn't matter, only rough presence |
 
 ## Positioning (revised after a literature check, July 2026)
@@ -44,7 +44,7 @@ on refusal steering. Critically: *"A recovery-path attribution analysis further 
 this recovery to the SAE reconstruction residual, the component left unexplained by the
 SAE."*
 
-That is a published result predicting our core effect should be **weak** — if the
+That is a published result predicting our core effect should be **weak** - if the
 redundancy lives outside the dictionary, other features should not be able to stand in for
 an ablated one. It has to be engaged, not ignored.
 
@@ -70,13 +70,13 @@ already frames splitting and absorption as arising from a concept being "inconsi
 distributed across multiple redundant or interfering latents", and penalises co-activation
 of directionally similar latents. The redundancy↔splitting link is published, as a training
 regulariser rather than a diagnostic. What survives is only that nobody uses *causal*
-reconstructability (`R`, not `R²`) as the predictor — a thinner claim than it first looked.
+reconstructability (`R`, not `R²`) as the predictor - a thinner claim than it first looked.
 
 ## The `bios` run: the project's central risk is retired
 
 The synthetic task could not answer whether single-feature ablation produces real damage.
-The `bios` preset — same GPT-2 small and SAE, but the real Bias-in-Bios professor/nurse
-task, class-balanced 50/50 — does. GPT-2 small scores 85.9% against a 50% floor, and the
+The `bios` preset - same GPT-2 small and SAE, but the real Bias-in-Bios professor/nurse
+task, class-balanced 50/50 - does. GPT-2 small scores 85.9% against a 50% floor, and the
 metric scale drops from ~7.3 to 1.57 (which is why `damage_t` had to replace an absolute
 damage threshold).
 
@@ -97,15 +97,15 @@ activation value is barely predictable, yet whose causal contribution is almost 
 restored. Prediction quality and causal restoration come apart, which is the whole premise.
 
 **Caveat that must travel with these numbers.** Damage is statistically strong but small in
-absolute terms — |damage| runs 0.007–0.035 on a metric of scale 1.57, with |t| up to 19
+absolute terms - |damage| runs 0.007–0.035 on a metric of scale 1.57, with |t| up to 19
 because n is 300–800 and the paired difference is consistent. "Restored 94% of the effect"
 is therefore 94% of a ~0.008 logit shift. Reliable, modest, and one task on one small model.
 
 ## First dictionary-vs-residual numbers
 
-`scripts/08_dictionary_vs_residual.py` fits the same reconstructor from three sources — the
+`scripts/08_dictionary_vs_residual.py` fits the same reconstructor from three sources - the
 other features in `S`, the SAE error term projected to `|S|` principal components, and both
-— then compares prediction and restoration. On the `split` preset, 33/40 targets clearing
+- then compares prediction and restoration. On the `split` preset, 33/40 targets clearing
 the damage noise floor:
 
 | source | mean R² | mean R |
@@ -124,17 +124,17 @@ On the `bios` preset, where `R` is finally meaningful, **the sign flips**:
 
 The dictionary's advantage goes from +0.099 (synthetic) to **−0.092** (real task). On a task
 with genuine semantic content, the SAE error term carries *more* information about a
-feature's activation than thirty other features do — while restoration works about equally
+feature's activation than thirty other features do - while restoration works about equally
 well from either source.
 
 **This leans against the project's original hypothesis and toward 2606.18322.** The
 feature's value is recoverable from both sources, and the dictionary has no privileged
-status. Both gaps sit inside the ±0.1 inconclusive band, so nothing is settled — but the
+status. Both gaps sit inside the ±0.1 inconclusive band, so nothing is settled - but the
 direction of travel is the opposite of what "dictionary-internal redundancy" predicts, and
 it reproduces the qualitative claim of the paper we are positioned against.
 
-That is a usable result either way. A careful negative — "post-ablation recoverability is
-not carried preferentially by the dictionary" — directly extends a recent paper and is
+That is a usable result either way. A careful negative - "post-ablation recoverability is
+not carried preferentially by the dictionary" - directly extends a recent paper and is
 worth more than a hypergraph built on an effect that is not there. What it must not become
 is a hypergraph paper that quietly omits the error-term comparison.
 
@@ -151,7 +151,7 @@ x ≈ b_dec + Σ_j a_j(x) · W_dec[j] + e(x)
 ```
 
 **Ablation** subtracts the feature's contribution from the *real* residual stream, so the SAE
-error term `e(x)` is preserved (this is the Sparse Feature Circuits convention — do not
+error term `e(x)` is preserved (this is the Sparse Feature Circuits convention - do not
 replace `x` with its SAE reconstruction):
 
 ```
@@ -183,11 +183,11 @@ where `⇒` means "can reconstruct well enough to restore causal function", not 
 | d_model / d_sae | 768 / 24576 | 2304 / 16384 |
 | fits in 8 GB | trivially | yes, bf16, batch ≤ 4 |
 
-**Task.** Bias-in-Bios (`LabHC/bias_in_bios`), the SHIFT/SFC setup — professor vs. nurse.
+**Task.** Bias-in-Bios (`LabHC/bias_in_bios`), the SHIFT/SFC setup - professor vs. nurse.
 Framed as a prompted logit-difference so the metric is a clean scalar per prompt. A synthetic
 offline task is included so the pipeline can be smoke-tested without downloads.
 
-**Token position.** Everything is measured at the **final prompt token** only — the position the
+**Token position.** Everything is measured at the **final prompt token** only - the position the
 metric is read from. This is a real limitation (it ignores reconstruction from earlier
 positions) and is deliberate for the MVE. Document it; relax it later.
 
@@ -207,20 +207,20 @@ regression over a cached matrix, not a training run.
 **Minimality search.** Never brute force. Seed `S` from the top ~30 candidates by
 |correlation| with `f_i`, then greedy backward elimination: repeatedly drop the feature whose
 removal costs the least `R`, stop when `R < τ`. Cost is ~`|S|²/2` rescue evals per target,
-i.e. ~10³ total — not `2^n`.
+i.e. ~10³ total - not `2^n`.
 
 ## Controls
 
 A reviewer kills the paper without these. They are implemented as first-class, not extras.
 
-1. **Constant write-back** — inject `f_i`'s dataset-mean activation, ignoring `S` entirely.
+1. **Constant write-back** - inject `f_i`'s dataset-mean activation, ignoring `S` entirely.
    *The most dangerous baseline.* If this rescues as well as `ĝ_θ`, nothing input-dependent
    was learned and the hypergraph is vacuous.
-2. **Random-direction rescue** — write `â_i` along a random feature direction at matched norm.
+2. **Random-direction rescue** - write `â_i` along a random feature direction at matched norm.
    Rules out rescue being mere norm restoration in the residual stream.
-3. **Ablate `S` alone** — if removing the sufficient set independently tanks the metric, `S`
+3. **Ablate `S` alone** - if removing the sufficient set independently tanks the metric, `S`
    isn't a reconstructor, it's just the circuit `f_i` lives in.
-4. **Held-out prompts** — `ĝ_θ` is fit and evaluated on disjoint splits, always.
+4. **Held-out prompts** - `ĝ_θ` is fit and evaluated on disjoint splits, always.
 
 ## Pre-registered secondary hypothesis
 
@@ -229,7 +229,7 @@ wider SAE widths. GemmaScope ships 16k / 65k / 262k at the same layer, so this i
 testable: measure `R` at 16k, then check whether high-`R` features are the ones that fragment
 at 65k.
 
-If it holds, reconstructability becomes a **diagnostic for SAE feature splitting** — a second
+If it holds, reconstructability becomes a **diagnostic for SAE feature splitting** - a second
 contribution that survives even if the hypergraph claims don't, and an easier sell to the
 SAE-evaluation audience.
 
@@ -251,11 +251,11 @@ features. Across all seven width doublings at `blocks.8.hook_resid_pre`:
 | 49152 → 98304 | 35.2% | 0.689 | 0.935 | 0.985 |
 
 About a third of features split at every doubling, and the spread is wide. So there is
-real variance for `R` to correlate against — the hypothesis is testable, which was not
+real variance for `R` to correlate against - the hypothesis is testable, which was not
 guaranteed. The rate being near-constant across two orders of magnitude of width is itself
 a descriptive finding worth a sentence in any writeup.
 
-**Not yet evidence.** Run on the `split` preset, `corr(R, max-cos) = -0.157` at n=24 —
+**Not yet evidence.** Run on the `split` preset, `corr(R, max-cos) = -0.157` at n=24 -
 the predicted sign, but p ≈ 0.46, and every `R` is pinned near 1.0 by the degenerate
 synthetic task. This validates the machinery end to end and nothing more. The number only
 becomes meaningful once the targets have real causal bite.
@@ -289,7 +289,7 @@ Two weeks to the first scatter plot. Everything else is downstream of it.
 
 ## Result: the experiment is viable (GPT-2 + Bias-in-Bios)
 
-The `bios` preset — same GPT-2/SAE as debug, real task, balanced classes — **passes all
+The `bios` preset - same GPT-2/SAE as debug, real task, balanced classes - **passes all
 three kill criteria**:
 
 | | value | threshold | |
@@ -301,7 +301,7 @@ three kill criteria**:
 Predictability explains only ~16% of the variance in causal restorability, which is the
 dissociation the whole project rests on. The learned reconstructor beats constant
 write-back by a clear margin, so something input-dependent is being used. And the scatter
-has a populated low-R²/high-R corner — e.g. a feature at R² = 0.08 with R = 0.79, nearly
+has a populated low-R²/high-R corner - e.g. a feature at R² = 0.08 with R = 0.79, nearly
 unpredictable yet largely restorable.
 
 Caveat to carry forward: `R` itself is compressed near 1.0 for most targets, so most of
@@ -314,7 +314,7 @@ Both are worth remembering because each produced a confident, wrong answer.
 
 **The damage gate was an absolute threshold.** `usable()` required `|damage| ≥ 0.1`,
 calibrated when the synthetic metric had scale ~7.3. The Bias-in-Bios metric has scale
-~1.6, making the same cutoff 6x stricter, and it reported 1 usable target out of 40 —
+~1.6, making the same cutoff 6x stricter, and it reported 1 usable target out of 40 -
 i.e. "the task is too blunt, abandon it". It is now gated on `damage_t`, the paired
 per-row damage over its standard error, which is scale-free and is exactly the quantity
 `R` divides by. The same run then yields 34 usable targets with `|t|` up to 25.
@@ -323,7 +323,7 @@ The lesson generalises: **damage on this task is small but highly significant.**
 0.03–0.16 on a metric of 1.6 look negligible and are in fact `t` = 10–25 across 800 paired
 rows. Never judge these by absolute size.
 
-**"Final token only" was blamed for suppressing damage — wrong.** `08_position_scope.py`
+**"Final token only" was blamed for suppressing damage - wrong.** `08_position_scope.py`
 compares ablating a feature at the final token against ablating it everywhere it fires.
 Median damage multiplier: **1.0x**. Even a feature with just 9.3% of its activation mass at
 the final token gains only 1.1x. The causal path to the metric runs through the final
@@ -342,7 +342,7 @@ The cause is visible in the numbers: `damage` maxes at 0.155 against a clean met
 ~7.3. Ablating one feature moves a task this easy by ~2%, so `R` is a ratio of two noise
 terms and *anything* written back "restores" it.
 
-This is the smoke test behaving correctly, not a result — but it sharpens a risk for the
+This is the smoke test behaving correctly, not a result - but it sharpens a risk for the
 main run. **The experiment lives or dies on target selection producing features with real
 causal bite.** Before trusting any Bias-in-Bios scatter, check the `damage` column first:
 if single-feature ablation moves the metric by a couple of percent there too, no amount of
@@ -351,7 +351,7 @@ before the hypergraph work is worth starting.
 
 ## Cost, and the optimisation that matters
 
-Greedy elimination is ~`|S|²/2` rescue passes per target — with `n_candidates=30` that is
+Greedy elimination is ~`|S|²/2` rescue passes per target - with `n_candidates=30` that is
 ~435 model passes per target, and it dominates everything else. Three debug targets took
 ~12 minutes on GPT-2 small.
 

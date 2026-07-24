@@ -14,13 +14,13 @@ __pycache__/
 data/
 figures/
 
-# model weights / tensors / caches — belt-and-suspenders in case any land outside data/
+# model weights / tensors / caches - belt-and-suspenders in case any land outside data/
 *.pt
 *.pth
 *.safetensors
 *.ckpt
 
-# secrets — never commit tokens
+# secrets - never commit tokens
 .env
 *.env
 .hf_token

@@ -1,7 +1,7 @@
-# RNAR — causal reconstructability of SAE features
+# RNAR - causal reconstructability of SAE features
 
 Can a deleted SAE feature be rebuilt from the other features well enough to restore the
-model's *behaviour* — and is that different from merely being *predictable* from them?
+model's *behaviour* - and is that different from merely being *predictable* from them?
 
 The full experiment design, controls, and pre-registered kill criteria are in
 [docs/DESIGN.md](docs/DESIGN.md). Read that first; it is the spec this code implements.
@@ -43,7 +43,7 @@ Artifacts land in `data/<preset>/`, figures in `figures/`.
 non-zero if the SAE is misaligned, and it has already caught two silent bugs that produced
 perfectly plausible-looking numbers.
 
-**Step 05 is the bottleneck** — ~`|S|²/2` model passes per target (~435 at the default
+**Step 05 is the bottleneck** - ~`|S|²/2` model passes per target (~435 at the default
 `n_candidates=30`). Use `--limit` while iterating. `cache.run_multi` amortises the prompt
 prefix across conditions, which took three debug targets from ~12 min to ~115 s; the win
 grows with `batch_size`, so do not lower it casually.
@@ -63,7 +63,7 @@ matching release.
 ## Tests
 
 The hook mechanics are the part that fails silently when wrong, so they are tested against
-a fake layer and fake SAE — no model downloads, runs in a second.
+a fake layer and fake SAE - no model downloads, runs in a second.
 
 ```powershell
 .venv\Scripts\python -m pytest -q
@@ -89,13 +89,13 @@ produced numbers that looked entirely reasonable.
 - **Left padding is load-bearing, and needs `position_ids`.** Every hook edits position
   `-1`, and `model.load` sets `padding_side="left"` so that is the last real token for
   every row. But HF derives `position_ids` from `arange` regardless of the mask, so padded
-  rows silently get shifted positions — L0 6613 instead of 625. `cache.tokenize` rebuilds
+  rows silently get shifted positions - L0 6613 instead of 625. `cache.tokenize` rebuilds
   `position_ids` from the attention mask; do not drop that.
 - **SAEs trained on TransformerLens need the residual mean-centred** along `d_model` (TL's
   `center_writing_weights`); raw HF activations are not centred and the offset grows with
   depth. Uncentred at layer 7: L0 625, explained variance −2.07. Centred: L0 74, EV +0.91.
   That is the `center_resid` flag, and `00_check_sae.py` is what tells you which way to set
-  it. Only encoding is affected — decoder rows are mean-zero to within 4% of their norm and
+  it. Only encoding is affected - decoder rows are mean-zero to within 4% of their norm and
   LayerNorm removes that component anyway, so injection still writes into the raw stream.
 - **Split by prompt text, not row index.** Any repeated prompt otherwise lands on both
   sides of the split and every R² pins at 1.000.
