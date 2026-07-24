@@ -1,7 +1,7 @@
-# RNAR - causal reconstructability of SAE features
+# RNAR: causal reconstructability of SAE features
 
 Can a deleted SAE feature be rebuilt from the other features well enough to restore the
-model's *behaviour* - and is that different from merely being *predictable* from them?
+model's *behaviour* and is that different from merely being *predictable* from them?
 
 The full experiment design, controls, and pre-registered kill criteria are in
 [docs/DESIGN.md](docs/DESIGN.md). Read that first; it is the spec this code implements.
@@ -63,7 +63,7 @@ matching release.
 ## Tests
 
 The hook mechanics are the part that fails silently when wrong, so they are tested against
-a fake layer and fake SAE - no model downloads, runs in a second.
+a fake layer and fake SAE no model downloads, runs in a second.
 
 ```powershell
 .venv\Scripts\python -m pytest -q
